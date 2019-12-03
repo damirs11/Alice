@@ -35,9 +35,9 @@ public class MenuView extends AppCompatActivity {
     }
 
     private void initComponents() {
-        wallpaper = (ImageView) findViewById(R.id.wallpaper);
-        title = (ImageView) findViewById(R.id.title);
-        btnStart = (Button) findViewById(R.id.btnStart);
+        wallpaper = findViewById(R.id.wallpaper);
+        title = findViewById(R.id.title);
+        btnStart = findViewById(R.id.btnStart);
 
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,7 +50,6 @@ public class MenuView extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // Ventana Emergente
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Exit");
         builder.setMessage("Do you really want to exit?");

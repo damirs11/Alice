@@ -31,6 +31,18 @@ import java.io.IOException;
 
 public class GameView extends AppCompatActivity {
 
+    private int TEXT_POST_X = 10;
+    private int TEXT_POST_Y = 50;
+
+    private int NUM_ROWS = 4;
+    private int NUM_BRICKS_PER_ROW = 8;
+
+    //Score
+    private int SCORE = 0;
+
+    //Lives
+    private int LIVES = 3;
+
     BreakoutView breakoutView;
 
     @Override
@@ -79,14 +91,6 @@ public class GameView extends AppCompatActivity {
         //Bricks
         private Brick[] bricks = new Brick[200];
         private int numBricks;
-        private int numRows;
-        private int numBricksPerRow;
-
-        //Score
-        private int score = 0;
-
-        //Lives
-        private int lives = 3;
 
         //Sound FX
         private SoundPool soundPool;
@@ -114,10 +118,6 @@ public class GameView extends AppCompatActivity {
 
             //Ball
             ball = new Ball(screenX, screenY, paddle.getHeight());
-
-            //Bricks
-            numRows = 4;
-            numBricksPerRow = 8;
 
             //Sound FX
             soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
@@ -152,27 +152,27 @@ public class GameView extends AppCompatActivity {
             //Reset Ball
             ball.reset(screenX, screenY, paddle.getHeight());
 
-            int brickWidth = screenX / numBricksPerRow;
+            int brickWidth = screenX / NUM_BRICKS_PER_ROW;
             int brickHeight = screenY / 20;
 
             //Create Wall
             numBricks = 0;
-            for (int column = 0; column < numBricksPerRow; column++) {
-                for (int row = 0; row < numRows; row++) {
+            for (int column = 0; column < NUM_BRICKS_PER_ROW; column++) {
+                for (int row = 0; row < NUM_ROWS; row++) {
                     bricks[numBricks] = new Brick(row, column, brickWidth, brickHeight);
                     numBricks++;
                 }
             }
 
             //Game Over
-            if(lives <= 0) {
-                score = 0;
-                lives = 3;
+            if(LIVES <= 0) {
+                SCORE = 0;
+                LIVES = 3;
             }
 
             if(win) {
-                score = 0;
-                lives = 3;
+                SCORE = 0;
+                LIVES = 3;
             }
         }
 
@@ -185,6 +185,7 @@ public class GameView extends AppCompatActivity {
                     update();
 
                 draw();
+
                 timeThisFrame = System.currentTimeMillis() - startFrameTime;
                 if (timeThisFrame >= 1) {
                     fps = 1000 / timeThisFrame;
@@ -193,25 +194,21 @@ public class GameView extends AppCompatActivity {
         }
 
         public void update() {
-            //Mover Player
             paddle.update(fps, screenX);
 
-            //Movimiento Ball
             ball.update(fps);
 
-            //Ball choca con Brick
             for (int i = 0; i < numBricks; i++) {
                 if (bricks[i].getVisibility()) {
                     if (Rect.intersects(bricks[i].getRect(), ball.getRect())) {
                         bricks[i].setInvisible();
                         ball.reverseYVelocity();
-                        score = score + 10;
+                        SCORE = SCORE + 10;
                         soundPool.play(explodeID, 1, 1, 0, 0, 1);
                     }
                 }
             }
 
-            //Ball choca con Player
             if (Rect.intersects(paddle.getRect(), ball.getRect())) {
                 ball.setRandomXVelocity();
                 ball.reverseYVelocity();
@@ -219,23 +216,20 @@ public class GameView extends AppCompatActivity {
                 soundPool.play(beep1ID, 1, 1, 0, 0, 1);
             }
 
-            //Ball choca con Screen Bottom
             if (ball.getRect().bottom + 20 > screenY) {
                 ball.reverseYVelocity();
                 ball.clearObstacleY(screenY - 30);
 
-                // Lose a life
-                lives--;
+                LIVES--;
                 soundPool.play(loseLifeID, 1, 1, 0, 0, 1);
 
-                if (lives <= 0) {
+                if (LIVES <= 0) {
                     paused = true;
                     win = false;
                     createBricksAndRestart();
                 }
             }
 
-            //Ball choca con Screen Top
             if (ball.getRect().top < 0) {
                 ball.reverseYVelocity();
                 ball.clearObstacleY(30);
@@ -243,14 +237,12 @@ public class GameView extends AppCompatActivity {
                 soundPool.play(beep2ID, 1, 1, 0, 0, 1);
             }
 
-            //Ball choca con Screen Left
             if (ball.getRect().left < 0) {
                 ball.reverseXVelocity();
                 ball.clearObstacleX(2);
                 soundPool.play(beep3ID, 1, 1, 0, 0, 1);
             }
 
-            //Ball choca con Screen Right
             if (ball.getRect().right > screenX) {
 
                 ball.reverseXVelocity();
@@ -259,8 +251,7 @@ public class GameView extends AppCompatActivity {
                 soundPool.play(beep3ID, 1, 1, 0, 0, 1);
             }
 
-            //Pause si gana
-            if(score == numBricks * 10) {
+            if(SCORE == numBricks * 10) {
                 paused = true;
                 win = true;
                 createBricksAndRestart();
@@ -272,40 +263,28 @@ public class GameView extends AppCompatActivity {
             if (surfHolder.getSurface().isValid()) {
                 canvas = surfHolder.lockCanvas();
 
-                //Color de fondo
                 canvas.drawColor(Color.BLACK);
 
-                //Color Ball
                 paint.setColor(Color.argb(255, 255, 255, 255));
 
-                //Player
                 src = new Rect(0, 0, bmpPlayer.getWidth(), bmpPlayer.getHeight()); //BMP Frame Size
                 dst = new Rect(paddle.getRect()); //Screen Frame Size
                 canvas.drawBitmap(bmpPlayer, src, dst, null);
 
-                //Ball
                 canvas.drawRect(ball.getRect(), paint);
 
-                //Color Bricks
-                //paint.setColor(Color.RED);
-
-                //Bricks
                 for (int i = 0; i < numBricks; i++) {
-                    switch(i) {
-                        case 0: case 4: case 8: case 12:
-                        case 16: case 20: case 24: case 28:
+                    switch(i%4) {
+                        case 0:
                             paint.setColor(Color.RED);
                             break;
-                        case 1: case 5: case 9: case 13:
-                        case 17: case 21: case 25: case 29:
+                        case 1:
                             paint.setColor(Color.BLUE);
                             break;
-                        case 2: case 6: case 10: case 14:
-                        case 18: case 22: case 26: case 30:
+                        case 2:
                             paint.setColor(Color.GREEN);
                             break;
-                        case 3: case 7: case 11: case 15:
-                        case 19: case 23: case 27: case 31:
+                        case 3:
                             paint.setColor(Color.YELLOW);
                             break;
                     }
@@ -314,26 +293,22 @@ public class GameView extends AppCompatActivity {
                     }
                 }
 
-                //Color letras
                 paint.setColor(Color.WHITE);
 
-                //Score
                 paint.setTextSize(40);
                 paint.setTextAlign(Paint.Align.LEFT);
-                canvas.drawText("Score: " + score + "   Lives: " + lives, 10, 50, paint);
+                canvas.drawText("Score: " + SCORE + "   Lives: " + LIVES, TEXT_POST_X, TEXT_POST_Y, paint);
 
-                //Win
-                if(score == numBricks * 10 && win && paused) {
+                if(SCORE == numBricks * 10 && win && paused) {
                     paint.setTextSize(90);
                     paint.setTextAlign(Paint.Align.CENTER);
-                    canvas.drawText("¡HAS GANADO!", screenX / 2, screenY / 2, paint);
+                    canvas.drawText("Вы выиграли!", screenX / 2, screenY / 2, paint);
                 }
 
-                //Fail
-                if(lives <= 0 && !win && paused) {
+                if(LIVES <= 0 && !win && paused) {
                     paint.setTextSize(90);
                     paint.setTextAlign(Paint.Align.CENTER);
-                    canvas.drawText("¡HAS PERDIDO!", screenX / 2, screenY / 2, paint);
+                    canvas.drawText("Вы проиграли!", screenX / 2, screenY / 2, paint);
                 }
 
                 surfHolder.unlockCanvasAndPost(canvas);

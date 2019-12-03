@@ -14,9 +14,9 @@ public class Brick {
         int padding = 5;
 
         rect = new Rect(column * width + padding,
-                row * height + padding,
+                row * height + padding + 80,
                 column * width + width - padding,
-                row * height + height - padding);
+                row * height + height - padding + 80);
     }
 
     public Rect getRect(){
