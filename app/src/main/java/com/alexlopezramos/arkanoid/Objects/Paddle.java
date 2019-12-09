@@ -52,20 +52,9 @@ public class Paddle {
         paddleMoving = state;
     }
 
-    public void update(long fps, int screenX){
-        if(paddleMoving == LEFT){
-            if(x >= 0)
-                x = (int)(x - paddleSpeed / fps);
-            else
-                x = 0;
-        }
+    public void update(long fps, float screenX){
 
-        if(paddleMoving == RIGHT){
-            if(x + width <= screenX)
-                x = (int)(x + paddleSpeed / fps);
-            else
-                x = screenX - width;
-        }
+        x = (int)(screenX - paddleSpeed / fps);
 
         rect.left = x;
         rect.right = x + width;

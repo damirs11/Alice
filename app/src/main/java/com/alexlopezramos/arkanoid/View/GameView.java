@@ -34,8 +34,8 @@ public class GameView extends AppCompatActivity {
     private int TEXT_POST_X = 10;
     private int TEXT_POST_Y = 50;
 
-    private int NUM_ROWS = 4;
-    private int NUM_BRICKS_PER_ROW = 8;
+    private int NUM_ROWS = 8;
+    private int NUM_BRICKS_PER_ROW = 10;
 
     //Score
     private int SCORE = 0;
@@ -194,7 +194,6 @@ public class GameView extends AppCompatActivity {
         }
 
         public void update() {
-            paddle.update(fps, screenX);
 
             ball.update(fps);
 
@@ -226,7 +225,6 @@ public class GameView extends AppCompatActivity {
                 if (LIVES <= 0) {
                     paused = true;
                     win = false;
-                    createBricksAndRestart();
                 }
             }
 
@@ -333,13 +331,12 @@ public class GameView extends AppCompatActivity {
         @Override
         public boolean onTouchEvent(MotionEvent motionEvent) {
             switch (motionEvent.getAction()) {
-                case MotionEvent.ACTION_DOWN:
+                case MotionEvent.ACTION_MOVE:
                     paused = false;
-                    win = false;
-                    if (motionEvent.getX() > screenX / 2) {
-                        paddle.setMovementState(paddle.RIGHT);
-                    } else {
-                        paddle.setMovementState(paddle.LEFT);
+                    paddle.update(fps, motionEvent.getX());
+
+                    if(LIVES <= 0 && !win) {
+                        createBricksAndRestart();
                     }
                     break;
                 case MotionEvent.ACTION_UP:
