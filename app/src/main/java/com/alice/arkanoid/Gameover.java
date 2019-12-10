@@ -1,4 +1,4 @@
-package com.alexlopezramos.arkanoid;
+package com.alice.arkanoid;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,7 +10,16 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.alexlopezramos.arkanoid.View.GameView;
+import com.alexlopezramos.arkanoid.R;
+import com.alice.arkanoid.View.GameView;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Objects;
 
 public class Gameover extends AppCompatActivity {
 
@@ -38,7 +47,7 @@ public class Gameover extends AppCompatActivity {
         TextView textViewHighScore = findViewById(R.id.highScore);
         Button btnStart = findViewById(R.id.btnStart);
 
-        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("APP_PREFERENCES", MODE_PRIVATE);
 
         CUR_SCORE = getIntent().getIntExtra("Score", 0);
         HIGH_SCORE = sharedPreferences.getInt("HighScore", 0);

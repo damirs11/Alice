@@ -1,4 +1,4 @@
-package com.alexlopezramos.arkanoid.View;
+package com.alice.arkanoid.View;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,7 +16,6 @@ import com.alexlopezramos.arkanoid.R;
 public class MenuView extends AppCompatActivity {
 
     ImageView wallpaper, title;
-    Button btnStart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,12 +36,36 @@ public class MenuView extends AppCompatActivity {
     private void initComponents() {
         wallpaper = findViewById(R.id.wallpaper);
         title = findViewById(R.id.title);
-        btnStart = findViewById(R.id.btnStart);
+        Button btn2 = findViewById(R.id.one);
+        Button btn3 = findViewById(R.id.second);
+        Button btn1 = findViewById(R.id.three);
 
-        btnStart.setOnClickListener(new View.OnClickListener() {
+        btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(), GameView.class);
+                i.putExtra("NUM_ROWS", 8);
+                i.putExtra("NUM_BRICKS_PER_ROW", 8);
+                startActivity(i);
+            }
+        });
+
+        btn3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), GameView.class);
+                i.putExtra("NUM_ROWS", 12);
+                i.putExtra("NUM_BRICKS_PER_ROW", 12);
+                startActivity(i);
+            }
+        });
+
+        btn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), GameView.class);
+                i.putExtra("NUM_ROWS", 5);
+                i.putExtra("NUM_BRICKS_PER_ROW", 5);
                 startActivity(i);
             }
         });

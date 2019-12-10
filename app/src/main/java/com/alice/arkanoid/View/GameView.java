@@ -1,4 +1,4 @@
-package com.alexlopezramos.arkanoid.View;
+package com.alice.arkanoid.View;
 
 import android.content.Context;
 import android.content.Intent;
@@ -23,11 +23,11 @@ import android.view.SurfaceView;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.alexlopezramos.arkanoid.Gameover;
-import com.alexlopezramos.arkanoid.Objects.Ball;
-import com.alexlopezramos.arkanoid.Objects.Brick;
-import com.alexlopezramos.arkanoid.Objects.Paddle;
 import com.alexlopezramos.arkanoid.R;
+import com.alice.arkanoid.Gameover;
+import com.alice.arkanoid.Objects.Ball;
+import com.alice.arkanoid.Objects.Brick;
+import com.alice.arkanoid.Objects.Paddle;
 
 import java.io.IOException;
 
@@ -57,6 +57,10 @@ public class GameView extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
         );
+
+        Intent i = getIntent();
+        NUM_ROWS = i.getIntExtra("NUM_ROWS", 8);
+        NUM_BRICKS_PER_ROW = i.getIntExtra("NUM_BRICKS_PER_ROW", 10);
 
         breakoutView = new BreakoutView(this);
         setContentView(breakoutView);

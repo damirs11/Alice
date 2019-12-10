@@ -1,6 +1,5 @@
-package com.alexlopezramos.arkanoid.Objects;
+package com.alice.arkanoid.Objects;
 
-import android.graphics.Bitmap;
 import android.graphics.Rect;
 
 import java.util.Random;

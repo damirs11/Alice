@@ -1,7 +1,6 @@
-package com.alexlopezramos.arkanoid.Objects;
+package com.alice.arkanoid.Objects;
 
 import android.graphics.Rect;
-import android.graphics.RectF;
 
 public class Brick {
 

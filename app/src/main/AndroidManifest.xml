@@ -9,12 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Gameover"></activity>
         <activity
-            android:name=".View.GameView"
+            android:name="com.alice.arkanoid.View.GameView"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".View.MenuView"
+            android:name="com.alice.arkanoid.View.MenuView"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,6 +21,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.alice.arkanoid.Gameover" />
     </application>
 
 </manifest>
