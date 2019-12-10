@@ -1,6 +1,7 @@
 package com.alexlopezramos.arkanoid.View;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
@@ -22,6 +23,7 @@ import android.view.SurfaceView;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.alexlopezramos.arkanoid.Gameover;
 import com.alexlopezramos.arkanoid.Objects.Ball;
 import com.alexlopezramos.arkanoid.Objects.Brick;
 import com.alexlopezramos.arkanoid.Objects.Paddle;
@@ -100,8 +102,11 @@ public class GameView extends AppCompatActivity {
         private int loseLifeID = -1;
         private int explodeID = -1;
 
+        Context mContext;
+
         public BreakoutView(Context context) {
             super(context);
+            mContext = context;
 
             //Canvas and Screen
             surfHolder = getHolder();
@@ -336,7 +341,9 @@ public class GameView extends AppCompatActivity {
                     paddle.update(fps, motionEvent.getX());
 
                     if(LIVES <= 0 && !win) {
-                        createBricksAndRestart();
+                        Intent gameover = new Intent(getApplicationContext(), Gameover.class);
+                        gameover.putExtra("Score", SCORE);
+                        startActivity(gameover);
                     }
                     break;
                 case MotionEvent.ACTION_UP:
